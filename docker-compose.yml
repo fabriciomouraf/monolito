@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  app:
+    image: monolito
+    command: ["/usr/wait-for-it.sh", "db:5432", "-t", "30", "--", "java", "-jar", "app.jar"]
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_HOST=db
+    networks:
+      - backoffice-network
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: minhaSenha
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - backoffice-network
+
+networks:
+  backoffice-network:
+    external: true
